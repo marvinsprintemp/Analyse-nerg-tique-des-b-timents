@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie de Rénovation Énergétique</title>
+    <meta name="description" content="Catalogue interactif des solutions d'optimisation thermique et énergétique pour l'habitat.">
+    <style>
+        :root {
+            --couleur-principale: #2c3e50;
+            --couleur-secondaire: #3498db;
+            --fond-global: #f8f9fa;
+            --fond-carte: #ffffff;
+            --texte-sombre: #333333;
+            --texte-clair: #6c757d;
+            --bordure: #e9ecef;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--fond-global);
+            color: var(--texte-sombre);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--couleur-principale);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .conteneur {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .panneau-controle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .champ-recherche {
+            width: 100%;
+            max-width: 600px;
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--bordure);
+            border-radius: 30px;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .champ-recherche:focus {
+            outline: none;
+            border-color: var(--couleur-secondaire);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.15);
+        }
+
+        .filtres {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .bouton-filtre {
+            background-color: var(--fond-carte);
+            border: 1px solid var(--bordure);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--texte-sombre);
+            transition: all 0.2s ease;
+        }
+
+        .bouton-filtre:hover, .bouton-filtre.actif {
+            background-color: var(--couleur-principale);
+            color: white;
+            border-color: var(--couleur-principale);
+        }
+
+        .grille-donnees {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .carte {
+            background: var(--fond-carte);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--bordure);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carte:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .en-tete-carte {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--fond-global);
+            background-color: #fafbfc;
+        }
+
+        .en-tete-carte h3 {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.2rem;
+            color: var(--couleur-principale);
+        }
+
+        .etiquette {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: var(--bordure);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--texte-clair);
+        }
+
+        .corps-carte {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .corps-carte p {
+            margin: 0 0 1.5rem 0;
+            color: var(--texte-clair);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .indicateurs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--fond-global);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: auto;
+        }
+
+        .ligne-indicateur {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .libelle-indicateur {
+            color: var(--texte-clair);
+        }
+
+        .valeur-indicateur {
+            font-weight: 600;
+            color: var(--texte-sombre);
+        }
+
+        .bloc-subvention {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-top: 1px solid #c8e6c9;
+        }
+
+        .aucun-resultat {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--texte-clair);
+            background: var(--fond-carte);
+            border-radius: 12px;
+            border: 1px dashed #ced4da;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Analyse des Solutions de Rénovation</h1>
+        <p>Classification et évaluation des dispositifs d'optimisation énergétique</p>
+    </header>
+
+    <main class="conteneur">
+        <div class="panneau-controle">
+            <input type="text" id="barreRecherche" class="champ-recherche" placeholder="Saisir un terme de recherche (ex: isolation, pompe, vitrage...)">
+            
+            <div class="filtres">
+                <button class="bouton-filtre actif" data-cible="tout">Vue globale</button>
+                <button class="bouton-filtre" data-cible="isolation">Isolation thermique</button>
+                <button class="bouton-filtre" data-cible="chauffage">Systèmes de chauffage</button>
+                <button class="bouton-filtre" data-cible="ventilation">Qualité de l'air</button>
+                <button class="bouton-filtre" data-cible="menuiserie">Menuiseries</button>
+            </div>
+        </div>
+
+        <div class="grille-donnees" id="conteneurResultats">
+            </div>
+    </main>
+
+    <script>
+        const baseDonnees = [
+            {
+                titre: "Isolation des combles perdus",
+                categorie: "isolation",
+                description: "Mise en place d'un isolant thermique par soufflage mécanique ou déroulage de rouleaux pour neutraliser les déperditions par la toiture.",
+                gainEstime: "25 à 30 %",
+                coutMoyen: "20 à 50 EUR / m2",
+                financements: "MaPrimeRénov', CEE"
+            },
+            {
+                titre: "Pompe à chaleur Air/Eau",
+                categorie: "chauffage",
+                description: "Dispositif thermodynamique captant les calories de l'air extérieur pour assurer la production d'eau chaude du réseau de chauffage central.",
+                gainEstime: "60 à 70 %",
+                coutMoyen: "10 000 à 15 000 EUR",
+                financements: "MaPrimeRénov', CEE, Éco-PTZ"
+            },
+            {
+                titre: "Ventilation Mécanique Contrôlée (Double Flux)",
+                categorie: "ventilation",
+                description: "Système de renouvellement d'air intégrant un échangeur thermique pour récupérer la chaleur de l'air vicié avant son extraction.",
+                gainEstime: "15 à 20 %",
+                coutMoyen: "4 000 à 8 000 EUR",
+                financements: "MaPrimeRénov', CEE"
+            },
+            {
+                titre: "Isolation des murs par l'extérieur (ITE)",
+                categorie: "isolation",
+                description: "Enveloppement de la façade par une couche isolante recouverte d'un parement, éliminant les ponts thermiques structurels.",
+                gainEstime: "20 à 25 %",
+                coutMoyen: "100 à 200 EUR / m2",
+                financements: "MaPrimeRénov', CEE, Éco-PTZ"
+            },
+            {
+                titre: "Remplacement des fenêtres (Double vitrage)",
+                categorie: "menuiserie",
+                description: "Installation de menuiseries à isolation renforcée contenant du gaz argon, pour supprimer les parois froides.",
+                gainEstime: "10 à 15 %",
+                coutMoyen: "300 à 800 EUR / unité",
+                financements: "MaPrimeRénov', CEE"
+            },
+            {
+                titre: "Chaudière biomasse (Granulés)",
+                categorie: "chauffage",
+                description: "Système de chauffage central utilisant la combustion de pellets de bois, ressource renouvelable à haut rendement.",
+                gainEstime: "50 à 60 %",
+                coutMoyen: "12 000 à 20 000 EUR",
+                financements: "MaPrimeRénov', CEE, Éco-PTZ"
+            }
+        ];
+
+        const conteneurResultats = document.getElementById('conteneurResultats');
+        const champRecherche = document.getElementById('barreRecherche');
+        const boutonsFiltre = document.querySelectorAll('.bouton-filtre');
+
+        function formaterCategorie(texte) {
+            const format = texte.charAt(0).toUpperCase() + texte.slice(1);
+            return format.replace('-', ' ');
+        }
+
+        function afficherDonnees(donnees) {
+            conteneurResultats.innerHTML = '';
+
+            if (donnees.length === 0) {
+                conteneurResultats.innerHTML = `
+                    <div class="aucun-resultat">
+                        Aucun dispositif ne correspond aux critères de recherche actuels.
+                    </div>
+                `;
+                return;
+            }
+
+            donnees.forEach(element => {
+                const composant = document.createElement('article');
+                composant.className = 'carte';
+                
+                composant.innerHTML = `
+                    <div class="en-tete-carte">
+                        <h3>${element.titre}</h3>
+                        <span class="etiquette">${formaterCategorie(element.categorie)}</span>
+                    </div>
+                    <div class="corps-carte">
+                        <p>${element.description}</p>
+                        <div class="indicateurs">
+                            <div class="ligne-indicateur">
+                                <span class="libelle-indicateur">Réduction de consommation</span>
+                                <span class="valeur-indicateur">${element.gainEstime}</span>
+                            </div>
+                            <div class="ligne-indicateur">
+                                <span class="libelle-indicateur">Investissement estimé</span>
+                                <span class="valeur-indicateur">${element.coutMoyen}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bloc-subvention">
+                        Éligibilité : ${element.financements}
+                    </div>
+                `;
+                conteneurResultats.appendChild(composant);
+            });
+        }
+
+        function filtrerInterface() {
+            const termeRecherche = champRecherche.value.toLowerCase();
+            const filtreActif = document.querySelector('.bouton-filtre.actif').dataset.cible;
+
+            const resultatsFiltres = baseDonnees.filter(element => {
+                const correspondRecherche = element.titre.toLowerCase().includes(termeRecherche) || 
+                                            element.description.toLowerCase().includes(termeRecherche);
+                const correspondCategorie = filtreActif === 'tout' || element.categorie === filtreActif;
+                
+                return correspondRecherche && correspondCategorie;
+            });
+
+            afficherDonnees(resultatsFiltres);
+        }
+
+        boutonsFiltre.forEach(bouton => {
+            bouton.addEventListener('click', (evenement) => {
+                boutonsFiltre.forEach(b => b.classList.remove('actif'));
+                evenement.target.classList.add('actif');
+                filtrerInterface();
+            });
+        });
+
+        champRecherche.addEventListener('input', filtrerInterface);
+
+        // Initialisation de l'affichage
+        afficherDonnees(baseDonnees);
+    </script>
+</body>
+</html>

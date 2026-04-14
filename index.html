@@ -3,367 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stratégie de Rénovation Énergétique</title>
-    <meta name="description" content="Catalogue interactif des solutions d'optimisation thermique et énergétique pour l'habitat.">
+    <title>Analyseur de Performance Énergétique</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --couleur-principale: #2c3e50;
-            --couleur-secondaire: #3498db;
-            --fond-global: #f8f9fa;
-            --fond-carte: #ffffff;
-            --texte-sombre: #333333;
-            --texte-clair: #6c757d;
-            --bordure: #e9ecef;
+            --couleur-primaire: #2b3a42;
+            --couleur-secondaire: #3f5765;
+            --couleur-accent: #00a8cc;
+            --fond: #f4f7f6;
+            --texte: #333333;
+            --bordure: #dcdcdc;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--fond-global);
-            color: var(--texte-sombre);
+            background-color: var(--fond);
+            color: var(--texte);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--couleur-principale);
-            color: white;
-            text-align: center;
-            padding: 3rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 2.2rem;
-            font-weight: 600;
-        }
-
-        header p {
-            margin: 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .conteneur {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .panneau-controle {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .champ-recherche {
-            width: 100%;
-            max-width: 600px;
-            padding: 1rem 1.5rem;
-            border: 1px solid var(--bordure);
-            border-radius: 30px;
-            font-size: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .champ-recherche:focus {
-            outline: none;
-            border-color: var(--couleur-secondaire);
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.15);
-        }
-
-        .filtres {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-        }
-
-        .bouton-filtre {
-            background-color: var(--fond-carte);
-            border: 1px solid var(--bordure);
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--texte-sombre);
-            transition: all 0.2s ease;
-        }
-
-        .bouton-filtre:hover, .bouton-filtre.actif {
-            background-color: var(--couleur-principale);
-            color: white;
-            border-color: var(--couleur-principale);
-        }
-
-        .grille-donnees {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.8rem;
-        }
-
-        .carte {
-            background: var(--fond-carte);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--bordure);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .carte:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .en-tete-carte {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--fond-global);
-            background-color: #fafbfc;
-        }
-
-        .en-tete-carte h3 {
-            margin: 0 0 0.8rem 0;
-            font-size: 1.2rem;
-            color: var(--couleur-principale);
-        }
-
-        .etiquette {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background-color: var(--bordure);
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--texte-clair);
-        }
-
-        .corps-carte {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .corps-carte p {
-            margin: 0 0 1.5rem 0;
-            color: var(--texte-clair);
-            font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .indicateurs {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            margin-bottom: 1.5rem;
-            background-color: var(--fond-global);
-            padding: 1rem;
+        header {
+            background-color: var(--couleur-primaire);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .conteneur-principal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .panneau {
+            background: white;
+            padding: 2rem;
             border-radius: 8px;
-            margin-top: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--bordure);
         }
 
-        .ligne-indicateur {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
+        .section-formulaire {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--bordure);
         }
 
-        .libelle-indicateur {
-            color: var(--texte-clair);
+        .section-formulaire h2 {
+            color: var(--couleur-secondaire);
+            font-size: 1.2rem;
+            margin-top: 0;
         }
 
-        .valeur-indicateur {
+        .groupe-champs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--texte-sombre);
+            margin-bottom: 0.5rem;
+            color: var(--couleur-primaire);
         }
 
-        .bloc-subvention {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+        input {
+            width: 100%;
             padding: 0.8rem;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-top: 1px solid #c8e6c9;
+            border: 1px solid var(--bordure);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
         }
 
-        .aucun-resultat {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--texte-clair);
-            background: var(--fond-carte);
-            border-radius: 12px;
-            border: 1px dashed #ced4da;
+        input:focus {
+            outline: none;
+            border-color: var(--couleur-accent);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--couleur-accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
             font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #008eb0;
+        }
+
+        .resultats-texte {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--fond);
+            border-radius: 4px;
+            border-left: 4px solid var(--couleur-accent);
+        }
+
+        @media (max-width: 900px) {
+            .conteneur-principal {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Analyse des Solutions de Rénovation</h1>
-        <p>Classification et évaluation des dispositifs d'optimisation énergétique</p>
+        <h1>Analyse des Performances Thermiques du Bâti</h1>
     </header>
 
-    <main class="conteneur">
-        <div class="panneau-controle">
-            <input type="text" id="barreRecherche" class="champ-recherche" placeholder="Saisir un terme de recherche (ex: isolation, pompe, vitrage...)">
-            
-            <div class="filtres">
-                <button class="bouton-filtre actif" data-cible="tout">Vue globale</button>
-                <button class="bouton-filtre" data-cible="isolation">Isolation thermique</button>
-                <button class="bouton-filtre" data-cible="chauffage">Systèmes de chauffage</button>
-                <button class="bouton-filtre" data-cible="ventilation">Qualité de l'air</button>
-                <button class="bouton-filtre" data-cible="menuiserie">Menuiseries</button>
+    <div class="conteneur-principal">
+        <div class="panneau">
+            <div class="section-formulaire">
+                <h2>Enveloppe : Façades</h2>
+                <div class="groupe-champs">
+                    <div>
+                        <label for="epaisseurFacade">Épaisseur isolant (cm)</label>
+                        <input type="number" id="epaisseurFacade" value="15" min="0" step="1">
+                    </div>
+                    <div>
+                        <label for="lambdaFacade">Conductivité Lambda (W/m.K)</label>
+                        <input type="number" id="lambdaFacade" value="0.038" min="0.01" step="0.001">
+                    </div>
+                </div>
             </div>
+
+            <div class="section-formulaire">
+                <h2>Enveloppe : Toiture</h2>
+                <div class="groupe-champs">
+                    <div>
+                        <label for="epaisseurToiture">Épaisseur isolant (cm)</label>
+                        <input type="number" id="epaisseurToiture" value="30" min="0" step="1">
+                    </div>
+                    <div>
+                        <label for="lambdaToiture">Conductivité Lambda (W/m.K)</label>
+                        <input type="number" id="lambdaToiture" value="0.040" min="0.01" step="0.001">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-formulaire">
+                <h2>Enveloppe : Planchers bas</h2>
+                <div class="groupe-champs">
+                    <div>
+                        <label for="epaisseurPlancher">Épaisseur isolant (cm)</label>
+                        <input type="number" id="epaisseurPlancher" value="10" min="0" step="1">
+                    </div>
+                    <div>
+                        <label for="lambdaPlancher">Conductivité Lambda (W/m.K)</label>
+                        <input type="number" id="lambdaPlancher" value="0.035" min="0.01" step="0.001">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-formulaire">
+                <h2>Équipements Techniques</h2>
+                <div class="groupe-champs">
+                    <div>
+                        <label for="rendementCVC">Rendement CVC global (%)</label>
+                        <input type="number" id="rendementCVC" value="90" min="50" max="150" step="1">
+                    </div>
+                    <div>
+                        <label for="optimisationGTB">Optimisation GTB (%)</label>
+                        <input type="number" id="optimisationGTB" value="10" min="0" max="40" step="1">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="calculerPerformances()">Générer l'analyse</button>
         </div>
 
-        <div class="grille-donnees" id="conteneurResultats">
+        <div class="panneau">
+            <h2>Graphique des déperditions surfaciques (U en W/m²K)</h2>
+            <canvas id="graphiqueDeperditions"></canvas>
+            
+            <div id="diagnosticTexte" class="resultats-texte">
+                Saisissez les paramètres de votre bâtiment et lancez l'analyse pour identifier les principales sources de déperdition thermique.
             </div>
-    </main>
+        </div>
+    </div>
 
     <script>
-        const baseDonnees = [
-            {
-                titre: "Isolation des combles perdus",
-                categorie: "isolation",
-                description: "Mise en place d'un isolant thermique par soufflage mécanique ou déroulage de rouleaux pour neutraliser les déperditions par la toiture.",
-                gainEstime: "25 à 30 %",
-                coutMoyen: "20 à 50 EUR / m2",
-                financements: "MaPrimeRénov', CEE"
-            },
-            {
-                titre: "Pompe à chaleur Air/Eau",
-                categorie: "chauffage",
-                description: "Dispositif thermodynamique captant les calories de l'air extérieur pour assurer la production d'eau chaude du réseau de chauffage central.",
-                gainEstime: "60 à 70 %",
-                coutMoyen: "10 000 à 15 000 EUR",
-                financements: "MaPrimeRénov', CEE, Éco-PTZ"
-            },
-            {
-                titre: "Ventilation Mécanique Contrôlée (Double Flux)",
-                categorie: "ventilation",
-                description: "Système de renouvellement d'air intégrant un échangeur thermique pour récupérer la chaleur de l'air vicié avant son extraction.",
-                gainEstime: "15 à 20 %",
-                coutMoyen: "4 000 à 8 000 EUR",
-                financements: "MaPrimeRénov', CEE"
-            },
-            {
-                titre: "Isolation des murs par l'extérieur (ITE)",
-                categorie: "isolation",
-                description: "Enveloppement de la façade par une couche isolante recouverte d'un parement, éliminant les ponts thermiques structurels.",
-                gainEstime: "20 à 25 %",
-                coutMoyen: "100 à 200 EUR / m2",
-                financements: "MaPrimeRénov', CEE, Éco-PTZ"
-            },
-            {
-                titre: "Remplacement des fenêtres (Double vitrage)",
-                categorie: "menuiserie",
-                description: "Installation de menuiseries à isolation renforcée contenant du gaz argon, pour supprimer les parois froides.",
-                gainEstime: "10 à 15 %",
-                coutMoyen: "300 à 800 EUR / unité",
-                financements: "MaPrimeRénov', CEE"
-            },
-            {
-                titre: "Chaudière biomasse (Granulés)",
-                categorie: "chauffage",
-                description: "Système de chauffage central utilisant la combustion de pellets de bois, ressource renouvelable à haut rendement.",
-                gainEstime: "50 à 60 %",
-                coutMoyen: "12 000 à 20 000 EUR",
-                financements: "MaPrimeRénov', CEE, Éco-PTZ"
-            }
-        ];
+        let graphiqueInstance = null;
 
-        const conteneurResultats = document.getElementById('conteneurResultats');
-        const champRecherche = document.getElementById('barreRecherche');
-        const boutonsFiltre = document.querySelectorAll('.bouton-filtre');
-
-        function formaterCategorie(texte) {
-            const format = texte.charAt(0).toUpperCase() + texte.slice(1);
-            return format.replace('-', ' ');
+        function calculerU(epaisseurCm, lambda) {
+            if (epaisseurCm === 0 || lambda === 0) return 3.5; // Valeur arbitraire d'un mur non isolé
+            const epaisseurM = epaisseurCm / 100;
+            const resistance = epaisseurM / lambda;
+            return 1 / resistance;
         }
 
-        function afficherDonnees(donnees) {
-            conteneurResultats.innerHTML = '';
+        function calculerPerformances() {
+            // Récupération des données enveloppe
+            const epFacade = parseFloat(document.getElementById('epaisseurFacade').value);
+            const lFacade = parseFloat(document.getElementById('lambdaFacade').value);
+            const uFacade = calculerU(epFacade, lFacade);
 
-            if (donnees.length === 0) {
-                conteneurResultats.innerHTML = `
-                    <div class="aucun-resultat">
-                        Aucun dispositif ne correspond aux critères de recherche actuels.
-                    </div>
-                `;
-                return;
+            const epToiture = parseFloat(document.getElementById('epaisseurToiture').value);
+            const lToiture = parseFloat(document.getElementById('lambdaToiture').value);
+            const uToiture = calculerU(epToiture, lToiture);
+
+            const epPlancher = parseFloat(document.getElementById('epaisseurPlancher').value);
+            const lPlancher = parseFloat(document.getElementById('lambdaPlancher').value);
+            const uPlancher = calculerU(epPlancher, lPlancher);
+
+            // Récupération des données équipements
+            const rendCVC = parseFloat(document.getElementById('rendementCVC').value);
+            const optiGTB = parseFloat(document.getElementById('optimisationGTB').value);
+
+            // Génération du diagnostic
+            genererDiagnostic(uFacade, uToiture, uPlancher, rendCVC, optiGTB);
+
+            // Mise à jour du graphique
+            actualiserGraphique([uFacade, uToiture, uPlancher]);
+        }
+
+        function genererDiagnostic(uF, uT, uP, cvc, gtb) {
+            const conteneurDiag = document.getElementById('diagnosticTexte');
+            
+            let paroiFaible = "Façades";
+            let maxU = uF;
+            if (uT > maxU) { maxU = uT; paroiFaible = "Toiture"; }
+            if (uP > maxU) { maxU = uP; paroiFaible = "Planchers"; }
+
+            let recommandation = `<strong>Axe d'amélioration prioritaire :</strong> La surface présentant les plus fortes déperditions est : <strong>${paroiFaible}</strong>. `;
+            
+            if (maxU > 0.5) {
+                recommandation += "Le coefficient de transmission thermique est élevé. Une réfection de l'isolation est strictement recommandée. ";
+            } else {
+                recommandation += "L'isolation de cette paroi est satisfaisante. ";
             }
 
-            donnees.forEach(element => {
-                const composant = document.createElement('article');
-                composant.className = 'carte';
-                
-                composant.innerHTML = `
-                    <div class="en-tete-carte">
-                        <h3>${element.titre}</h3>
-                        <span class="etiquette">${formaterCategorie(element.categorie)}</span>
-                    </div>
-                    <div class="corps-carte">
-                        <p>${element.description}</p>
-                        <div class="indicateurs">
-                            <div class="ligne-indicateur">
-                                <span class="libelle-indicateur">Réduction de consommation</span>
-                                <span class="valeur-indicateur">${element.gainEstime}</span>
-                            </div>
-                            <div class="ligne-indicateur">
-                                <span class="libelle-indicateur">Investissement estimé</span>
-                                <span class="valeur-indicateur">${element.coutMoyen}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bloc-subvention">
-                        Éligibilité : ${element.financements}
-                    </div>
-                `;
-                conteneurResultats.appendChild(composant);
+            const efficaciteGlobale = (cvc / 100) * (1 + (gtb / 100));
+            recommandation += `<br><br><strong>Équipements :</strong> Les systèmes actifs appliquent un facteur de performance de ${(efficaciteGlobale).toFixed(2)}. Un déploiement accru des automatismes GTB pourrait réduire la consommation résiduelle de façon significative.`;
+
+            conteneurDiag.innerHTML = recommandation;
+        }
+
+        function actualiserGraphique(donneesU) {
+            const ctx = document.getElementById('graphiqueDeperditions').getContext('2d');
+            
+            if (graphiqueInstance) {
+                graphiqueInstance.destroy();
+            }
+
+            graphiqueInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Façades', 'Toiture', 'Planchers'],
+                    datasets: [{
+                        label: 'Coefficient U (W/m²K) - Plus bas est meilleur',
+                        data: donneesU,
+                        backgroundColor: [
+                            'rgba(0, 168, 204, 0.7)',
+                            'rgba(43, 58, 66, 0.7)',
+                            'rgba(63, 87, 101, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 168, 204, 1)',
+                            'rgba(43, 58, 66, 1)',
+                            'rgba(63, 87, 101, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Déperditions (W/m²K)'
+                            }
+                        }
+                    }
+                }
             });
         }
 
-        function filtrerInterface() {
-            const termeRecherche = champRecherche.value.toLowerCase();
-            const filtreActif = document.querySelector('.bouton-filtre.actif').dataset.cible;
-
-            const resultatsFiltres = baseDonnees.filter(element => {
-                const correspondRecherche = element.titre.toLowerCase().includes(termeRecherche) || 
-                                            element.description.toLowerCase().includes(termeRecherche);
-                const correspondCategorie = filtreActif === 'tout' || element.categorie === filtreActif;
-                
-                return correspondRecherche && correspondCategorie;
-            });
-
-            afficherDonnees(resultatsFiltres);
-        }
-
-        boutonsFiltre.forEach(bouton => {
-            bouton.addEventListener('click', (evenement) => {
-                boutonsFiltre.forEach(b => b.classList.remove('actif'));
-                evenement.target.classList.add('actif');
-                filtrerInterface();
-            });
-        });
-
-        champRecherche.addEventListener('input', filtrerInterface);
-
-        // Initialisation de l'affichage
-        afficherDonnees(baseDonnees);
+        // Initialisation au chargement
+        window.onload = calculerPerformances;
     </script>
 </body>
 </html>
